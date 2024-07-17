@@ -282,6 +282,7 @@ main(int argc, char *argv[])
 	argv += optind;
 
 	xo_set_version(VMSTAT_XO_VERSION);
+	xo_open_container("vmstat");
 	if (!hflag)
 		xo_set_options(NULL, "no-humanize");
 	if (todo == 0)
@@ -383,6 +384,7 @@ nlist_ok:
 		dointr(interval, reps);
 	if (todo & VMSTAT)
 		dovmstat(interval, reps);
+	xo_close_container("vmstat");
 	xo_finish();
 	exit(0);
 }
