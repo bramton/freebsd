@@ -66,7 +66,7 @@
 #include <libutil.h>
 #include <libxo/xo.h>
 
-#define VMSTAT_XO_VERSION "1"
+#define VMSTAT_XO_VERSION "2"
 
 static char da[] = "da";
 
