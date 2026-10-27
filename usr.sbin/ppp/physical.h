@@ -104,6 +104,7 @@ struct physical {
     unsigned rts_cts : 1;      /* Is rts/cts enabled ? */
     unsigned nonstandard_pppoe : 1; /* Is PPPoE mode nonstandard */
     unsigned pppoe_configured : 1; /* temporary hack */
+    unsigned pppmaxp : 1;      /* Send PPP-Max-Payload (RFC 4638) */
     unsigned parity;           /* What parity is enabled? (tty flags) */
     unsigned speed;            /* tty speed */
 
@@ -172,3 +173,4 @@ extern void physical_SetDescriptor(struct physical *);
 extern void physical_SetAsyncParams(struct physical *, u_int32_t, u_int32_t);
 extern int physical_Slot(struct physical *);
 extern int physical_SetPPPoEnonstandard(struct physical *, int);
+extern int physical_SetPPPMaxP(struct physical *, int);

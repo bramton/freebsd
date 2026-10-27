@@ -145,6 +145,7 @@
 #define	VAR_RAD_ALIVE	38
 #define	VAR_PPPOE	39
 #define	VAR_PORT_ID	40
+#define	VAR_PPPMAXP	41
 
 /* ``accept|deny|disable|enable'' masks */
 #define NEG_HISMASK (1)
@@ -2328,6 +2329,17 @@ SetVariable(struct cmdargs const *arg)
     }
     break;
 
+  case VAR_PPPMAXP:
+    if (strcasecmp(argp, "on") == 0)
+      physical_SetPPPMaxP(arg->cx->physical, 1);
+    else if (strcasecmp(argp, "off") == 0)
+      physical_SetPPPMaxP(arg->cx->physical, 0);
+    else {
+      log_Printf(LogWARN, "PPP-Max-Payload value must be \"on\" or \"off\"\n");
+      res = 1;
+    }
+    break;
+
 #ifndef NORADIUS
   case VAR_PORT_ID:
     if (strcasecmp(argp, "default") == 0)
@@ -2485,6 +2497,9 @@ static struct cmdtab const SetCommands[] = {
   {"pppoe", NULL, SetVariable, LOCAL_AUTH | LOCAL_CX,
    "Connect using standard/3Com mode", "set pppoe [standard|3Com]",
    (const char *)VAR_PPPOE},
+  {"pppmaxp", NULL, SetVariable, LOCAL_AUTH | LOCAL_CX,
+   "Send the PPP-Max-Payload tag", "set pppmaxp [on|off]",
+   (const char *)VAR_PPPMAXP},
   {NULL, NULL, NULL, 0, NULL, NULL, NULL},
 };
 

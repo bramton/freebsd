@@ -637,6 +637,17 @@ ether_Create(struct physical *p)
       }
     }
 
+    /* Set PPP-Max-Payload value as described in RFC 4638 */
+    if (p->cfg.pppmaxp) {
+      uint16_t mru = p->link.lcp.want_mru;
+      if (NgSendMsg(dev->cs, connectpath, NGM_PPPOE_COOKIE,
+		NGM_PPPOE_SETMAXP, &mru, sizeof(mru)) == -1) {
+        log_Printf(LogWARN, "``%s'': Cannot set PPP-Max-Payload: %s\n",
+                 connectpath, strerror(errno));
+        return ether_Abandon(dev, p);
+      }
+    }
+
     /* And finally, request a connection to the given provider */
 
     data = (struct ngpppoe_init_data *)alloca(sizeof *data + providerlen);
@@ -674,6 +685,8 @@ ether_Create(struct physical *p)
 
     dev->timeout = dev->dev.cd.delay;
     dev->connected = CARRIER_PENDING;
+    if (p->cfg.pppmaxp)
+      dev->dev.mtu = p->link.lcp.want_mru;
     /* This will be overridden by our session id - if provided by netgraph */
     dev->slot = GetIfIndex(path);
   } else {

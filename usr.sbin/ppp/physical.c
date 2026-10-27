@@ -201,6 +201,7 @@ physical_Create(struct datalink *dl, int type)
   p->cfg.ndev = NMODEMS;
   p->cfg.cd.necessity = CD_DEFAULT;
   p->cfg.cd.delay = 0;		/* reconfigured or device specific default */
+  p->cfg.pppmaxp = 0;
 
   lcp_Init(&p->link.lcp, dl->bundle, &p->link, &dl->fsmp);
   ccp_Init(&p->link.ccp, dl->bundle, &p->link, &dl->fsmp);
@@ -1120,5 +1121,12 @@ physical_SetPPPoEnonstandard(struct physical *p, int enable)
 {
    p->cfg.nonstandard_pppoe = enable ? 1 : 0;
    p->cfg.pppoe_configured = 1;
+   return 1;
+}
+
+int
+physical_SetPPPMaxP(struct physical *p, int enable)
+{
+   p->cfg.pppmaxp = enable ? 1 : 0;
    return 1;
 }
